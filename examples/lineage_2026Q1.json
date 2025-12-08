@@ -1,0 +1,21 @@
+
+{
+  "kind": 30001,
+  "pubkey": "287ced00220c8964fae473d6417bb420ebeb694b4b0b977e3af17b49a57e88de",
+  "created_at": 1765221464,
+  "tags": [
+    [
+      "root",
+      "8382ece43facb2c7b5093773cfda2396e129fab87030898873dbd92e490b24a7"
+    ],
+    [
+      "sig",
+      "25d2eef18be7b44ae30621036ac1f286ff6767e192cb7dc786ff3b1aab3c1434261d448839ef062025a5873fb453c7ad04ae4097b923734cf3db0dd83f653802"
+    ],
+    [
+      "epoch",
+      "2026Q1"
+    ]
+  ],
+  "content": ""
+}
