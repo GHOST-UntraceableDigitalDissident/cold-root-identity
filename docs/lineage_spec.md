@@ -192,6 +192,4 @@ This keeps Nostr simple while enabling safe operational key rotation.
 
 This is a **draft specification** and may evolve as client developers provide feedback.
 
-```
-
 
