@@ -1,5 +1,3 @@
----
-
 # **Cold Root Identity (CLI Prototype)**
 
 *A reference implementation of offline root keys, deterministic epoch keys, and lineage proofs for Nostr.*
