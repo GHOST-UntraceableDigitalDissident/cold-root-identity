@@ -1,1 +1,72 @@
+# ------------------------------------------
+# Cold Root Identity – Demo CLI Session
+# ------------------------------------------
+# This file demonstrates how to:
+# 1. Generate a cold root seed (offline)
+# 2. Derive an epoch key for a label (e.g. 2026Q1)
+# 3. Produce the lineage event JSON
+# 4. Verify the lineage event
+#
+# Outputs shown here are examples only.
+# Do NOT reuse these values for real identities.
+# ------------------------------------------
+
+
+# 1. Generate a cold root seed
+$ python cold_root_identity.py init
+
+=== Cold Root Seed (STORE OFFLINE, NEVER ONLINE) ===
+2a7c9e8b0e828557e1cd117e991bdea86f42afd299e65e23bb7b7379fc4f4c22
+
+Root public key (for reference only, can be shared):
+5b7c8bc5f6fa83ce8e3a1d710fb302bf6b1d96223da92727e27940bb8a1eac43
+
+Root npub (optional, do not use for posting):
+npub1k8f4r04ss0cji0sg7e8glnpqsfh92w8pm8h8jlgrg7r9rn3lpx2sq6jk8c
+
+Write the seed hex down on paper and delete this file/output if saved.
+
+
+# 2. Derive an epoch key and lineage event
+$ python cold_root_identity.py derive-epoch \
+    --root-seed-hex 2a7c9e8b0e828557e1cd117e991bdea86f42afd299e65e23bb7b7379fc4f4c22 \
+    --label 2026Q1
+
+=== Derived Epoch Key ===
+Label: 2026Q1
+Epoch pubkey (hex): c3c0c63e95a8da3d50cc4b9af3f58b364d95a80de1d0b5641a98e9c7f64d59b4
+Epoch npub: npub1m6f89u0c5p3wy2jrtrdzply7l4yggtt3d2w8s8s0tsfy2ah2rgcquwes06
+
+Epoch nsec (IMPORT THIS INTO YOUR CLIENT):
+nsec1x4p0lv55zx0ljj34xqngjj9v9wy7z5m699ur85nxc8w4n3qeg0sscwny78
+
+=== Lineage Event JSON (publish from the epoch key) ===
+{
+  "kind": 30001,
+  "pubkey": "c3c0c63e95a8da3d50cc4b9af3f58b364d95a80de1d0b5641a98e9c7f64d59b4",
+  "created_at": 1765200000,
+  "tags": [
+    ["root", "5b7c8bc5f6fa83ce8e3a1d710fb302bf6b1d96223da92727e27940bb8a1eac43"],
+    ["sig", "fa0c74d1a18b93a027a885eef7a578507f45948f8af1d65618c0dad086dcce3a81696608cbedf1a394ae9e64452c8f91c8ea52e33c33ffd858de8b215a24f809"],
+    ["epoch", "2026Q1"]
+  ],
+  "content": ""
+}
+
+
+# 3. Save lineage event to file
+$ echo '{ ... }' > lineage_2026Q1.json
+
+
+# 4. Verify the lineage event
+$ python cold_root_identity.py verify-lineage lineage_2026Q1.json
+VALID lineage event.
+Root pubkey:  5b7c8bc5f6fa83ce8e3a1d710fb302bf6b1d96223da92727e27940bb8a1eac43
+Epoch pubkey: c3c0c63e95a8da3d50cc4b9af3f58b364d95a80de1d0b5641a98e9c7f64d59b4
+Epoch label:  2026Q1
+
+
+# ------------------------------------------
+# End of demo session.
+# ------------------------------------------
 
