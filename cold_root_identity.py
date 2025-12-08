@@ -2,8 +2,14 @@
 """
 Cold Root Identity / Epoch Key CLI Prototype
 
-Requires:
-    pip install pynacl
+Reference implementation of:
+- Cold root seed generation
+- Deterministic epoch key derivation (HKDF-SHA256)
+- Lineage event signing (kind 30001 by default)
+- Lineage verification
+
+This is a research / prototype tool.
+Run root operations offline. Not production hardened.
 """
 
 import argparse
@@ -79,7 +85,7 @@ def convert_bits(data: bytes, from_bits: int, to_bits: int, pad: bool = True) ->
     """General power-of-2 base conversion. Used for 8->5 bit conversion."""
     acc = 0
     bits = 0
-    ret = []
+    ret: List[int] = []
     maxv = (1 << to_bits) - 1
     max_acc = (1 << (from_bits + to_bits - 1)) - 1
 
@@ -90,9 +96,7 @@ def convert_bits(data: bytes, from_bits: int, to_bits: int, pad: bool = True) ->
         bits += from_bits
         while bits >= to_bits:
             bits -= to_bits
-            ret.append((acc >> bits) & maxv
-
-            )
+            ret.append((acc >> bits) & maxv)
     if pad:
         if bits:
             ret.append((acc << (to_bits - bits)) & maxv)
@@ -309,3 +313,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
