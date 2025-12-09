@@ -166,6 +166,48 @@ All implementations SHOULD match the specification and reference test vectors ex
 
 ---
 
+## Library API
+
+Cold Root Identity now provides a stable Python reference implementation under the coldroot package.
+It exposes three canonical functions that mirror the specification:  
+The library API mirrors SPEC.md and is intended to be stable across languages.
+```
+from coldroot import derive_epoch_key, make_lineage_event, verify_lineage
+```
+### Functions
+These functions define the expected behavior for implementations and correspond directly to the rules in **[docs/SPEC.md](./docs/SPEC.md)**
+
+- derive_epoch_key(root_seed_hex, epoch_label)
+Deterministically derive an ed25519 epoch keypair.
+
+- make_lineage_event(root_sk, epoch_vk, epoch_label)
+Produce a lineage event (kind 30001) signed by the offline root key.
+
+- verify_lineage(root_pubkey_hex, event_json)
+Validate lineage events according to SPEC.md.
+
+These functions define the expected behavior for other languages and client implementations.
+
+### Test Vectors and Compliance
+
+Canonical test vectors for epoch derivation and lineage events are published in:
+```
+test_vectors/
+```
+
+Implementations in other languages SHOULD match these outputs exactly.
+Automated tests validating determinism and lineage verification live under:
+```
+tests/
+```
+
+Run:
+```
+pytest -v
+```
+
+---
+
 # **Derivation Scheme (Reference Standard)**
 
 This implementation defines a deterministic, reproducible derivation process:
