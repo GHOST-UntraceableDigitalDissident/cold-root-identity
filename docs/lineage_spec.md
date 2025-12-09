@@ -1,6 +1,3 @@
-# `docs/lineage_spec.md`
-
-```
 # Lineage Event Specification (Draft)
 
 Cold Root Identity introduces an offline root key and a rotating set of deterministic
