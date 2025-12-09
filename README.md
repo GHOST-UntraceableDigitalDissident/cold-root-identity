@@ -32,6 +32,16 @@ It only compromises a finite epoch window.
 
 ---
 
+# Identity flow at a glance
+<sub>*Cold Root Identity: root authority stays offline, clients follow deterministic rotations.*</sub>
+
+
+<img src="docs/cold-root-flow.png" width="600">
+
+For detailed specification documents, see **[`/docs`](docs/)**.
+
+---
+
 # **Features**
 
 ### ✔ Generate a cold root key
