@@ -148,6 +148,24 @@ This validates:
 
 ---
 
+## Specification
+
+The full Cold Root Identity specification is documented here:
+
+**[docs/SPEC.md](./docs/SPEC.md)**
+
+This describes:
+
+- deterministic epoch key derivation  
+- HKDF parameters  
+- lineage event format (kind 30001)  
+- client verification rules  
+- expected client behavior  
+
+All implementations SHOULD match the specification and reference test vectors exactly.
+
+---
+
 # **Derivation Scheme (Reference Standard)**
 
 This implementation defines a deterministic, reproducible derivation process:
