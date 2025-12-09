@@ -9,6 +9,9 @@ All derivation, signing, and lineage verification is done through a simple Pytho
 This is not a client or a relay.
 It is a **spec plus tooling layer** meant to give developers a safe identity lifecycle model.
 
+> Status: Prototype v0.1.0 — seeking client developer feedback.
+
+
 ---
 
 # **Why This Exists**
