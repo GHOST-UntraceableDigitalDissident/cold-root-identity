@@ -1,6 +1,3 @@
-# `docs/derivation_scheme.md`
-
-```
 # Deterministic Derivation Scheme (Draft)
 
 Cold Root Identity relies on a deterministic, reproducible derivation process that produces
