@@ -1,6 +1,3 @@
-# `docs/client_integration.md`
-
-```
 # Client Integration Guidance (Draft)
 
 This document describes how Nostr clients can support Cold Root Identity without any
