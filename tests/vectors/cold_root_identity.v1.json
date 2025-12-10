@@ -1,0 +1,44 @@
+{
+  "spec_version": "0.1.0",
+  "language": "python",
+  "description": "Cold Root Identity reference vectors for Python implementation",
+  "root": {
+    "id": "root-0001",
+    "seed_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "sk_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "pk_hex": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+    "nsec": null,
+    "npub": null
+  },
+  "epochs": [
+    {
+      "id": "epoch-2025-Q1",
+      "label": "2025-Q1",
+      "sk_hex": "5c3c90ed6c5ac4f43a62fb3304559ecc90d87165f1d963d945487619b40d3603",
+      "pk_hex": "bf728f4f4c10cfcf8497764e7ee4f6c3bea6ea1517bfe093ce650588b13fde82",
+      "npub": null,
+      "lineage_event": {
+        "kind": 30001,
+        "created_at": 1735689600,
+        "content": "",
+        "tags": [
+          [
+            "root",
+            "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8"
+          ],
+          [
+            "sig",
+            "ade5255a71410a8c865f2f1c20302fd1af232766fd27d6b53ee38cbb1cc994d9ac2d4dd565f3f3bd30fb33b1da1a90fdb2bac4924cf3b1dd9bc25faa538e7109"
+          ],
+          [
+            "epoch",
+            "2025-Q1"
+          ]
+        ],
+        "pubkey": "bf728f4f4c10cfcf8497764e7ee4f6c3bea6ea1517bfe093ce650588b13fde82",
+        "id": null,
+        "sig": null
+      }
+    }
+  ]
+}
