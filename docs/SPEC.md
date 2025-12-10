@@ -352,6 +352,18 @@ length = 32 bytes
 Implementations MUST use these parameters to reproduce the reference vectors in
 `tests/vectors/cold_root_identity.v1.json`
 
+### Matching Implementations
+
+As of tag `v0.1.0-vectors`, two reference implementations reproduce the
+vectors exactly:
+
+- Python (`coldroot/`)
+- Go (`go/`)
+
+Any future implementation must reproduce the values in
+`tests/vectors/cold_root_identity.v1.json` byte-for-byte to claim compliance
+with this specification.
+
 
 ### Compliance Requirement
 
