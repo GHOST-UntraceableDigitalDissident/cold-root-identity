@@ -338,6 +338,21 @@ A signed Git tag identifies the vector freeze:
 
 Any change to derivation rules or lineage semantics MUST be accompanied by new reference vectors and a new versioned tag.
 
+### HKDF derivation parameters (normative)
+
+Epoch keys are derived from the 32 byte root seed using HKDF-SHA256 with the
+following exact parameter set:
+```
+IKM = root_seed (32 bytes, decoded from hex)    
+salt = "nostr-cold-root" (UTF-8)  
+info = "epoch:" + label (UTF-8)    
+length = 32 bytes
+```  
+
+Implementations MUST use these parameters to reproduce the reference vectors in
+`tests/vectors/cold_root_identity.v1.json`
+
+
 ### Compliance Requirement
 
 To claim compatibility with this specification, an implementation MUST:  
