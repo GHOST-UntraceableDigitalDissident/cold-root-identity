@@ -1,0 +1,15 @@
+{
+  "name": "coldroot-js",
+  "version": "1.0.0",
+  "description": "Cold Root Identity JS reference implementation",
+  "main": "coldroot.js",
+  "scripts": {
+    "test": "node test_vectors.js"
+  },
+  "keywords": [],
+  "author": "GHOST",
+  "license": "MIT",
+  "dependencies": {
+    "tweetnacl": "^1.0.3"
+  }
+}

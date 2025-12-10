@@ -39,3 +39,13 @@ jobs:
         go mod tidy
         go test ./...
 
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+
+    - name: Run JS vector tests
+      run: |
+        cd js
+        npm ci
+        npm test
