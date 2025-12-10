@@ -51,6 +51,18 @@ Implementations MUST accept:
 • MUST NOT be modified in any way  
 • Reuse yields identical keys
 
+### Epoch Label Format
+
+Epoch keys MUST be derived from a unique, deterministic label. The label MUST be a UTF8 string and MUST NOT repeat for the same root authority. Labels MAY be human readable or structured, but they MUST satisfy all of the following:  
+- The label uniquely identifies a single epoch.  
+- The label is stable under re derivation.  
+- The label does not encode secret material.  
+- The label is included verbatim in lineage events so that clients can reproduce and verify derivation.  
+
+Common examples include sequential integers (“0”, “1”, “2”, …) or structured time based labels (“2025Q4”, “2026Q1”), but the specification only requires uniqueness and determinism. 
+
+Implementations MUST treat reuse of a label for the same root authority as an error.
+
 ### 2.2 HKDF Parameters
 
 Derivation uses HKDF SHA256 with fixed parameters:
@@ -144,8 +156,20 @@ signature = S
 )
 ```
 
-
 6. Extract the epoch label from the `["epoch", label]` tag
+
+### Freshness and Non Reuse
+
+Clients MUST reject any lineage event where the `curr_epoch_pubkey` has already appeared earlier in the same root authority’s lineage chain. A pubkey may only serve as the active epoch once. Reuse invalidates freshness and MUST be treated as an invalid lineage event.  
+
+### Epoch Label Validation
+
+After extracting the label, a client MUST ensure:
+- The label is a UTF8 string.  
+- The label has not appeared earlier in the lineage for this root.  
+- The label matches the derivation scheme declared in the event (opaque to clients, but MUST NOT repeat).  
+- The label is stable under re derivation and uniquely identifies this epoch.  
+- If any label validation fails, the lineage event MUST be rejected.  
 
 If any step fails, lineage MUST be rejected.
 
