@@ -114,6 +114,19 @@ Run the full compliance check with:
 `pytest -v`
 Any change to key derivation, lineage semantics, or event structure will cause tests to fail until vectors are intentionally regenerated and versioned.
 
+### HKDF parameters (normative)
+
+Epoch derivation uses HKDF-SHA256 with the following exact parameters:
+
+- IKM: the 32 byte root seed (decoded from hex)
+- salt: the UTF-8 string `nostr-cold-root`
+- info: the UTF-8 string `epoch:` concatenated with the epoch label  
+  (example: `epoch:2025-Q1`)
+- L: 32 bytes of output
+
+Any implementation must use these parameters to reproduce the vectors in
+`tests/vectors/cold_root_identity.v1.json`.
+
 ---
 
 # **Installation**
