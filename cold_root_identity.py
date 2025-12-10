@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 
-Cold Root Identity v0.1.1 / Epoch Key CLI
+Cold Root Identity v0.1 / Epoch Key CLI
 
 Thin wrapper around the coldroot library:
 - Root seed generation
