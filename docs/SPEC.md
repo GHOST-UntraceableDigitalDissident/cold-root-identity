@@ -234,6 +234,47 @@ Canonical reference materials:
 
 Implementations SHOULD match all reference vectors exactly.
 
+## 9. Reference Vectors (Normative)
+
+Implementations of Cold Root Identity must reproduce the official reference vectors published with this specification.  
+The canonical root seed for test purposes is:
+
+`000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f`  
+
+From this seed, implementations must deterministically derive:  
+1. The root secret key and public key  
+2. The epoch secret key and public key for the label `"2025-Q1"`   
+3. The lineage event binding the root to the `"2025-Q1"` epoch key  
+
+The authoritative vectors are stored in the repository under:  
+
+`tests/vectors/cold_root_identity.v1.json`
+
+A deterministic timestamp scheme is used for reference vectors:  
+epoch labels of the form `"YYYY-Qn"` map to the first second of that quarter in UTC.  
+Runtime clients remain free to use the current time for freshness.
+
+A signed Git tag identifies the vector freeze:
+
+`v0.1.0-vectors`
+
+Any change to derivation rules or lineage semantics MUST be accompanied by new reference vectors and a new versioned tag.
+
+### Compliance Requirement
+
+To claim compatibility with this specification, an implementation MUST:  
+- Re-derive all keys and lineage fields from the canonical seed
+- Match the reference JSON exactly for:
+  - sk_hex
+  - pk_hex
+  - kind
+  - created_at
+  - tags
+  - pubkey
+- Pass the same vector tests provided in `tests/test_vectors.py`
+
+Failure to reproduce these vectors indicates a deviation from the specification.
+
 ## 9. License
 
 The Cold Root Identity specification is released under a permissive license to maximize adoption, cross client compatibility, and independent reimplementation.
