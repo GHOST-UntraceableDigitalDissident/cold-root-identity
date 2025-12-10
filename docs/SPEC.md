@@ -202,7 +202,85 @@ If lineage events conflict (invalid signatures, mismatched roots, contradictory 
 • Clients MUST show a warning  
 • Clients MAY require explicit user selection
 
-## 6. Security Model (Short)
+## 6. Client Integration
+
+Clients implementing Cold Root Identity MUST follow the behaviors in this section. These rules define how lineage is discovered, validated, selected, and applied, and how client behavior changes when lineage is absent, invalid, or ignored.
+
+### 6.1 Discovery of Lineage Events
+
+A client MUST attempt to discover lineage events for a known root authority. Discovery MAY use any of the following mechanisms:
+
+• Querying relays for events of kind: 30001 signed by the root pubkey  
+• Following a user provided root pubkey declared in metadata  
+• Using cached lineage previously verified by the client  
+
+Clients MUST NOT infer or synthesize lineage. Only published events signed by the root are valid sources of truth.  
+
+### 6.2 Freshness Selection Rule
+
+When multiple valid lineage events exist for the same root authority, clients MUST select the freshest valid epoch. Freshness is defined strictly by:
+1. Highest `created_at` timestamp  
+2. If two lineage events share the same timestamp, the client MAY apply implementation specific tie breaking (e.g., event id ordering)  
+
+The lineage event with the highest **valid** `created_at` becomes the active epoch for all signing and display behavior.  
+
+### 6.3 Handling Missing or Invalid Lineage
+
+When clients fail to locate any valid lineage for a given root pubkey:
+
+• The client MUST treat the origin root key as the identity anchor  
+• The client MUST show a warning if the user attempts to post  
+• The client MUST NOT guess an epoch key or rotate implicitly  
+
+When lineage exists but is invalid (failed signature, mismatched root, reused label, reused epoch pubkey):
+
+• The client MUST ignore the invalid lineage event  
+• The client MUST NOT switch epochs  
+• The client MAY surface a warning to the user  
+
+### 6.4 Continuity of Historical Events
+
+Clients MUST preserve event continuity:
+
+• Events signed under old epoch keys MUST remain attributed to those epoch keys  
+• Clients MUST NOT rewrite, remap, or reinterpret signatures from previous epochs  
+• History continuity MUST be computed strictly by the pubkey used at the time the event was created  
+
+Lineage does not retroactively re sign or re anchor older events. Continuity is preserved by design.
+
+### 6.5 Switching Active Signing Keys
+
+After verifying lineage and selecting the freshest valid event:
+1. Extract the epoch public key   
+2. Verify the root signature over the raw epoch pubkey bytes  
+3. If valid, adopt that epoch pubkey as the current active identity  
+4. When posting, the client MUST sign with the user’s corresponding epoch private key (imported or generated deterministically by the user’s local implementation)  
+
+Clients MUST NOT switch keys unless lineage verification succeeds.
+
+### 6.6 Ignoring Lineage
+
+Clients MAY choose to ignore lineage entirely. This is allowed behavior and preserves backward compatibility.
+
+However:
+
+• Ignoring lineage results in **identity discontinuity**  
+• Users interacting through such clients will appear to “change pubkeys” when entering a new epoch  
+• Clients MUST NOT present ignored lineage as erroneous; it is simply unsupported  
+
+### 6.7 Minimal Compliance Summary
+
+A client supporting Cold Root Identity MUST:
+
+• Discover lineage events for a given root  
+• Verify the root signature over the epoch pubkey  
+• Reject reused epoch labels or reused epoch keys  
+• Select the freshest valid lineage event  
+• Adopt the associated epoch key as the active identity  
+• Preserve historical attribution to older epoch pubkeys  
+• Treat missing or invalid lineage conservatively and never rotate implicitly  
+
+## 7. Security Model (Short)
 
 • Root key MUST remain offline  
 • Epoch keys SHOULD rotate regularly  
@@ -211,7 +289,7 @@ If lineage events conflict (invalid signatures, mismatched roots, contradictory 
 • Lineage SHOULD be published immediately after loading a new epoch key  
 • Compromise of the root key invalidates the full identity
 
-## 7. Compatibility and Non Breaking Behavior
+## 8. Compatibility and Non Breaking Behavior
 
 Cold Root Identity is fully backward compatible.
 
@@ -224,7 +302,7 @@ Aware clients gain survivable identity and forward secure rotation.
 
 There are no interoperability risks.
 
-## 8. Reference Implementations
+## 9. Reference Implementations
 
 Canonical reference materials:
 
@@ -234,7 +312,7 @@ Canonical reference materials:
 
 Implementations SHOULD match all reference vectors exactly.
 
-## 9. Reference Vectors (Normative)
+## 10. Reference Vectors (Normative)
 
 Implementations of Cold Root Identity must reproduce the official reference vectors published with this specification.  
 The canonical root seed for test purposes is:
@@ -275,6 +353,6 @@ To claim compatibility with this specification, an implementation MUST:
 
 Failure to reproduce these vectors indicates a deviation from the specification.
 
-## 9. License
+## 11. License
 
 The Cold Root Identity specification is released under a permissive license to maximize adoption, cross client compatibility, and independent reimplementation.
