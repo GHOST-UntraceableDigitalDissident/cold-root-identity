@@ -1,4 +1,5 @@
 # **Cold Root Identity (CLI Prototype)**
+[![CRI test vectors](https://github.com/GHOST-UntraceableDigitalDissident/cold-root-identity/actions/workflows/tests.yml/badge.svg)](https://github.com/GHOST-UntraceableDigitalDissident/cold-root-identity/actions/workflows/tests.yml)
 
 *A reference implementation of offline root keys, deterministic epoch keys, and lineage proofs for Nostr.*
 
