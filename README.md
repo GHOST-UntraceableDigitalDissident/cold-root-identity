@@ -9,7 +9,7 @@ All derivation, signing, and lineage verification is done through a simple Pytho
 This is not a client or a relay.
 It is a **spec plus tooling layer** meant to give developers a safe identity lifecycle model.
 
-> Status: Prototype v0.1.0 — seeking client developer feedback.
+> Status: Prototype v0.1.0 — seeking client developer feedback.  
 
 
 ---
@@ -61,6 +61,58 @@ For detailed specification documents, see **[`/docs`](docs/)**.
 Lineage events use standard **NIP 01**.
 Relays remain unchanged.
 Clients can support this today.
+
+---
+
+# Reference Vectors
+
+Cold Root Identity ships with deterministic reference vectors to guarantee consistent behavior across implementations and languages. These vectors define:  
+- The canonical root seed for test purposes
+- The derived root secret and public keys
+- The deterministic epoch key for 2025-Q1
+- The corresponding lineage event signed by the root  
+
+These vectors are frozen under:
+
+`tests/vectors/cold_root_identity.v1.json`
+
+Python re-derives these values in:
+
+`tests/test_vectors.py`
+
+Any implementation in Go, Rust, or another language must match this file byte-for-byte for:  
+- Root secret key
+- Root public key
+- Epoch secret key
+- Epoch public key
+
+Lineage event fields:  
+- kind
+- created_at
+- content
+- tags
+- pubkey
+
+A signed tag marks the vector freeze:  
+
+`v0.1.0-vectors`
+
+If a future version of the specification changes derivation semantics, a new vector file and tag will be published.
+
+## Deterministic Timestamp Rule
+
+Runtime lineage events use the current system time.  
+Reference vectors use a deterministic timestamp derived from the epoch label:
+- `YYYY-Qn` maps to the first second of that quarter in UTC
+- Example: `"2025-Q1"` -> `2025-01-01T00:00:00Z` -> `1735689600`
+
+This ensures all implementations produce identical lineage events when verifying against published vectors while keeping runtime freshness semantics intact.
+
+## Test Suite
+
+Run the full compliance check with:
+`pytest -v`
+Any change to key derivation, lineage semantics, or event structure will cause tests to fail until vectors are intentionally regenerated and versioned.
 
 ---
 
@@ -313,7 +365,7 @@ MIT.
 **GHOST**
 Untraceable Digital Dissident
 
-A clean, minimal identity lifecycle standard for Nostr.
+- npub18dlusgmprudw46nracaldxe9hz4pdmrws8g6lsusy6qglcv5x48s0lh8x3  
 
 
 
