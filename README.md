@@ -171,59 +171,88 @@ Run the CLI directly:
 python cold_root_identity.py --help
 ```
 
+## CLI Usage
+
+After installation, the `coldroot` command becomes available. This is the
+preferred interface for exercising the CRI-01 reference implementation.
+
+### Derive an Epoch Key
+
+`coldroot derive --epoch 2026Q1 --root-seed <root_seed_hex>`
+
+
+### Generate a Lineage Event
+
+`coldroot lineage --epoch 2026Q1 --root-seed <root_seed_hex>`
+
+
+### Verify a Lineage Event
+
+`coldroot verify lineage.json`
+
+The CLI performs no additional logic beyond the CRI-01 specification. All
+outputs are deterministic and match the reference vectors.
+
 ---
 
-# **Commands**
+## Commands
 
-## **1. Generate a Cold Root**
+The CLI is the preferred interface for working with the CRI reference implementation.  
+All commands are deterministic and match the reference vectors.
 
-```bash
-python cold_root_identity.py init
+---
+
+### 1. Derive a Root Seed (Cold Root)
+
+You generate the cold root seed yourself. It is a 32 byte random value that must remain offline.
+
+Example using Python:
+
+```python
+import os, binascii
+print(binascii.hexlify(os.urandom(32)).decode())
 ```
+Outputs:
+- 32 byte root seed (hex)  
+- This seed never touches a Nostr client  
+- Store offline and treat as your long-term authority key  
+
+### 2. Derive an Epoch Key
+
+`coldroot derive --epoch 2025Q1 --root-seed <ROOT_SEED_HEX>`  
 
 Outputs:
+- epoch private key (hex)  
+- epoch public key (hex)  
 
-* 32 byte root seed (hex)
-* root public key (hex)
-* root npub (informational only)
+The epoch private key (`nsec`) is the key you import into your Nostr client for this epoch.
 
-**Store the root seed offline.
-Never import the root key into a Nostr client.**
+### 3. Generate a Lineage Event  
 
----
+`coldroot lineage --epoch 2025Q1 --root-seed <ROOT_SEED_HEX>`  
 
-## **2. Derive an Epoch Key**
+Outputs a lineage event JSON containing:
+- kind (default 30001)  
+- pubkey (epoch pubkey)  
+- created_at  
+- tags:  
+  - ["root", <root_pubkey_hex>]
+  - ["sig", <signature_by_root_over_epoch_pubkey>]
+  - ["epoch", <label>]
 
-```bash
-python cold_root_identity.py derive-epoch \
-    --root-seed-hex <ROOT_HEX> \
-    --label 2025Q1
-```
+Clients follow this event to rotate identities safely.
+Publish exactly one lineage event per epoch.
 
-Outputs:
+### 4. Verify a Lineage Event
 
-* epoch private key
-* epoch public key (hex)
-* epoch npub / nsec
-* lineage event JSON (`kind 30001`, recommended)
+`coldroot verify lineage.json`  
 
-Import the **epoch nsec** into your Nostr client.
-Publish the lineage event exactly once from that epoch key.
+Validates:
+- the root pubkey in the lineage event  
+- the Ed25519 signature over the epoch pubkey  
+- event integrity and deterministic structure  
 
----
-
-## **3. Verify a Lineage Event**
-
-```bash
-python cold_root_identity.py verify-lineage lineage.json
-```
-
-This validates:
-
-* the root pubkey matches the lineage event
-* the signature over the epoch pubkey is correct
-* tags match the reference spec
-* lineage is intact and reproducible
+This ensures the lineage event correctly links the epoch key to the offline root.
 
 ---
 
