@@ -7,13 +7,15 @@ Author:   GHOST (Untraceable Digital Dissident)
 Status:   Draft
 Version:  v0.1.0
 Created:  2025-12-09
-License:  Permissive
+License:  MIT
 ```
 
 
 
 
 Cold Root Identity defines a deterministic key rotation scheme that preserves long term identity continuity on Nostr. An offline root key authorizes each new epoch key through a signed lineage event. Clients that follow lineage gain survivable identity with no protocol changes and no relay modifications.
+
+SPEC.md is normative; other docs are explanatory breakdowns of sections 2–6” and avoid introducing new MUST/SHOULD rules outside SPEC.
 
 ## 1. Terminology
 
@@ -402,4 +404,4 @@ Failure to reproduce these vectors indicates a deviation from the specification.
 
 ## 11. License
 
-The Cold Root Identity specification is released under a permissive license to maximize adoption, cross client compatibility, and independent reimplementation.
+The Cold Root Identity specification is released under a MIT license to maximize adoption, cross client compatibility, and independent reimplementation.
