@@ -135,7 +135,8 @@ Cold Root Identity currently has two matching reference implementations:
 - **Python**: core library under `coldroot/`  
   - Test suite: `pytest`
 - **Go**: module under `go/`  
-  - Test suite: `cd go && go test ./...`
+  - Test suite: `cd go && go test ./...`  
+- **JavaScript (Node)**: matching implementation under `js/`, verified against the same vectors.
 
 Both implementations reproduce the deterministic vectors in
 `tests/vectors/cold_root_identity.v1.json` and are validated against the same
@@ -487,6 +488,39 @@ Publish lineage immediately after moving the epoch key into a client.
 * Reference code for client verification logic
 * Optional hardware key workflow
 * Standardization track once patterns stabilize
+
+---
+# Development and Tests
+
+Cold Root Identity includes deterministic reference vectors under  
+`tests/vectors/cold_root_identity.v1.json`. All implementations (Python, Go, and
+JavaScript) MUST reproduce these vectors exactly.  
+
+### Local Tests
+Run the full test suite locally:
+
+```
+# Python
+pytest -v
+
+# Go
+cd go
+go test ./...
+cd ..
+
+# JavaScript
+cd js
+npm test
+cd ..
+```
+### Continuous Integration
+
+GitHub Actions runs Python, Go, and JavaScript vector tests on every push.
+Any change that breaks determinism or lineage semantics will fail CI until
+vectors are intentionally regenerated and versioned.
+
+This guarantees cross-language correctness and enforces the CRI-01
+specification at the test-vectors level.
 
 ---
 
