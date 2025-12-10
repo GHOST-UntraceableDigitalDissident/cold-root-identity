@@ -304,11 +304,7 @@ There are no interoperability risks.
 
 ## 9. Reference Implementations
 
-Canonical reference materials:
-
-• `cold_root_identity.py`  
-• `test_vectors/epoch_derivation.json`  
-• `test_vectors/lineage_events.json`
+Reference vectors SHALL be located at `tests/vectors/cold_root_identity.v1.json`  
 
 Implementations SHOULD match all reference vectors exactly.
 
