@@ -127,6 +127,19 @@ Epoch derivation uses HKDF-SHA256 with the following exact parameters:
 Any implementation must use these parameters to reproduce the vectors in
 `tests/vectors/cold_root_identity.v1.json`.
 
+## Implementations
+
+Cold Root Identity currently has two matching reference implementations:
+
+- **Python**: core library under `coldroot/`  
+  - Test suite: `pytest`
+- **Go**: module under `go/`  
+  - Test suite: `cd go && go test ./...`
+
+Both implementations reproduce the deterministic vectors in
+`tests/vectors/cold_root_identity.v1.json` and are validated against the same
+HKDF parameters and lineage event structure.
+
 ---
 
 # **Installation**
