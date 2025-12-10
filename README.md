@@ -142,6 +142,86 @@ Both implementations reproduce the deterministic vectors in
 HKDF parameters and lineage event structure.
 
 ---
+# Test Vectors Explained
+
+Cold Root Identity ships deterministic test vectors so every implementation in every language can reproduce identical results. This prevents silent drift, keeps derivations honest, and ensures lineage validation behaves the same across clients.
+
+## Why deterministic HKDF is required
+
+Epoch keys must derive identically from the same `(root_seed, epoch_label)` pair across all languages.  
+Using HKDF SHA256 with fixed `salt` and `info` ensures:  
+- the same root seed always produces the same child seed  
+- no implementation can introduce randomness or library specific behavior  
+- epoch keys remain reproducible indefinitely  
+
+If HKDF is not deterministic, lineage proofs break because clients would derive non matching keys.  
+
+## How epoch labels bind to seeds
+
+The epoch label is inserted directly into the HKDF `info` field:
+
+`info = "epoch:" + <label>`
+
+This creates:  
+
+1. Namespace isolation  
+  - Each label corresponds to a unique derivation namespace.
+  - `2025-Q1` and `2025Q1` produce different keys.  
+
+2. Re-derivability  
+Anyone who knows:
+- the root seed
+- the epoch label
+- fixed HKDF parameters
+
+ Can re derive the same epoch key. No other metadata or state is required.
+
+## Why the timestamp in vectors is deterministic
+
+Runtime lineage events use actual timestamps.
+Reference vectors cannot depend on clocks, so they map structured labels of the form `YYYY-Qn` to a deterministic timestamp:  
+
+`first second of that quarter in UTC`
+
+Example:  
+`2025-Q1` -> `2025-01-01T00:00:00Z` -> `1735689600`
+
+This ensures:  
+- identical lineage events across implementations  
+- stable canonical JSON  
+- reproducible cross language tests  
+
+## How lineage validation works
+
+Each lineage event carries three critical tags:  
+
+`["root",  <root_pubkey_hex>]`  
+`["sig",   <root_signature_over_epoch_pubkey>]`  
+`["epoch", <label>]`  
+
+
+Clients validate lineage by:  
+1. Hex decoding the epoch public key  
+2. Extracting the root pubkey  
+3. Extracting the signature  
+4. Running:
+
+```
+ed25519_verify(
+    public_key = root_pubkey,
+    message    = raw_epoch_pubkey_bytes,
+    signature  = sig
+)
+```
+
+If valid, the client knows:  
+- the epoch key was explicitly authorized by the root  
+- the epoch label corresponds to the derivation namespace  
+- continuity cannot be forged by clients or relays  
+
+This is what allows safe rotation while preserving long term identity continuity.
+
+---
 
 # **Installation**
 
