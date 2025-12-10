@@ -74,7 +74,7 @@ Info: "epoch:<epoch_label>" (ASCII)
 L: 32 bytes
 ```
 Salt MUST remain constant for all CRI implementations.
-Not required, but strengthens cross-compatibility.
+
 
 ### 2.3 Key Material
 
@@ -160,14 +160,14 @@ signature = S
 
 ### Freshness and Non Reuse
 
-Clients MUST reject any lineage event where the `curr_epoch_pubkey` has already appeared earlier in the same root authority’s lineage chain. A pubkey may only serve as the active epoch once. Reuse invalidates freshness and MUST be treated as an invalid lineage event.  
+Clients MUST reject any lineage event where the `epoch_pubkey` in the event has already appeared earlier in the same root authority’s lineage chain.
 
 ### Epoch Label Validation
 
 After extracting the label, a client MUST ensure:
 - The label is a UTF8 string.  
 - The label has not appeared earlier in the lineage for this root.  
-- The label matches the derivation scheme declared in the event (opaque to clients, but MUST NOT repeat).  
+- The label exactly matches the value carried in the lineage event and MUST NOT repeat for this root.    
 - The label is stable under re derivation and uniquely identifies this epoch.  
 - If any label validation fails, the lineage event MUST be rejected.  
 
