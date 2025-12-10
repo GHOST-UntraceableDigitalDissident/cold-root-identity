@@ -269,9 +269,9 @@ These functions define the expected behavior for other languages and client impl
 ### Test Vectors and Compliance
 
 Canonical test vectors for epoch derivation and lineage events are published in:
-```
-test_vectors/
-```
+
+Deterministic reference vectors for both derivation and lineage validation are frozen in `tests/vectors/cold_root_identity.v1.json`. All implementations MUST match these outputs exactly.
+
 
 Implementations in other languages SHOULD match these outputs exactly.
 Automated tests validating determinism and lineage verification live under:
