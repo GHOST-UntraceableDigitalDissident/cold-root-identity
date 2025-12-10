@@ -10,6 +10,9 @@ All derivation, signing, and lineage verification is done through a simple Pytho
 This is not a client or a relay.
 It is a **spec plus tooling layer** meant to give developers a safe identity lifecycle model.
 
+The v0.1.0-vectors release locks the deterministic test vector set. 
+All language implementations must match these vectors exactly.
+
 > Status: Reference implementation v0.1.0. — seeking client developer feedback.  
 
 
