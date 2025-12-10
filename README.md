@@ -1,4 +1,4 @@
-# **Cold Root Identity (CLI Prototype)**
+# **Cold Root Identity (CLI reference implementation v0.1.0.)**
 [![CRI test vectors](https://github.com/GHOST-UntraceableDigitalDissident/cold-root-identity/actions/workflows/tests.yml/badge.svg)](https://github.com/GHOST-UntraceableDigitalDissident/cold-root-identity/actions/workflows/tests.yml)
 
 *A reference implementation of offline root keys, deterministic epoch keys, and lineage proofs for Nostr.*
@@ -10,7 +10,7 @@ All derivation, signing, and lineage verification is done through a simple Pytho
 This is not a client or a relay.
 It is a **spec plus tooling layer** meant to give developers a safe identity lifecycle model.
 
-> Status: Prototype v0.1.0 — seeking client developer feedback.  
+> Status: Reference implementation v0.1.0. — seeking client developer feedback.  
 
 
 ---
@@ -471,23 +471,12 @@ Publish lineage immediately after moving the epoch key into a client.
 
 ---
 
-# **Limitations (Prototype)**
+# **Limitations**
 
 * Reference quality, not production hardened
 * No encrypted local storage (intentional for cold workflows)
 * No client integrations yet
-* Go and Rust ports planned
 
----
-
-# **Roadmap**
-
-* Go implementation with static binaries
-* Python importable library (`import coldroot`)
-* Test vectors for deterministic derivation
-* Reference code for client verification logic
-* Optional hardware key workflow
-* Standardization track once patterns stabilize
 
 ---
 # Development and Tests
