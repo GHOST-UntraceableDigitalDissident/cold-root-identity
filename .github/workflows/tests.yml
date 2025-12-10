@@ -1,0 +1,39 @@
+name: CRI test vectors
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+        go-version: ["1.18", "1.21"]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Python deps
+      run: |
+        pip install pytest pynacl
+
+    - name: Run Python vector tests
+      run: pytest -v
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Run Go vector tests
+      run: |
+        cd go
+        go test ./...
