@@ -33,7 +33,7 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-        - name: Run Go vector tests
+    - name: Run Go vector tests
       run: |
         cd go
         go mod tidy
