@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cold-root-identity"
+version = "0.1.0"
+description = "Cold Root Identity reference implementation"
+authors = [{ name = "GHOST" }]
+requires-python = ">=3.10"
+dependencies = ["PyNaCl"]
+
+[project.scripts]
+coldroot = "coldroot.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["coldroot"]
