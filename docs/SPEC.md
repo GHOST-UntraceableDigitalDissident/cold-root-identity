@@ -93,7 +93,10 @@ Encoding rules:
 
 • Identical `(root_seed, epoch_label)` MUST produce identical epoch keypairs  
 • Different labels MUST produce distinct keypairs  
-• Labels MUST NOT be normalized, trimmed, transformed, or lowercased
+• Labels MUST NOT be normalized, trimmed, transformed, or lowercased  
+• These determinism requirements apply uniformly across all reference
+implementations, including Python, Go, and JavaScript.
+
 
 ## 3. Lineage Event Format
 
@@ -306,7 +309,18 @@ There are no interoperability risks.
 
 Reference vectors SHALL be located at `tests/vectors/cold_root_identity.v1.json`  
 
-Implementations SHOULD match all reference vectors exactly.
+Implementations MUST match all reference vectors exactly to claim CRI-01
+compliance.
+
+As of tag `v0.1.0-vectors`, three reference implementations reproduce the
+vectors byte-for-byte:  
+
+- **Python** (`coldroot/`)  
+- **Go** (`go/`)  
+- **JavaScript (Node)** (`js/`)  
+
+Any implementation in any language MUST reproduce the values in
+`tests/vectors/cold_root_identity.v1.json` exactly.
 
 ## 10. Reference Vectors (Normative)
 
@@ -359,6 +373,20 @@ vectors exactly:
 Any future implementation must reproduce the values in
 `tests/vectors/cold_root_identity.v1.json` byte-for-byte to claim compliance
 with this specification.
+
+### JavaScript Determinism
+
+The JavaScript reference implementation (`js/`) uses TweetNaCl for Ed25519 and
+a native HKDF-SHA256 implementation. It reproduces all vector fields exactly,
+including: 
+
+- epoch secret key and public key  
+- root signature over raw epoch public key bytes  
+- lineage event structure and field ordering  
+- deterministic timestamp mapping for labeled epochs  
+
+Any future JavaScript or TypeScript implementation MUST match these values
+exactly.
 
 
 ### Compliance Requirement
