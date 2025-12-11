@@ -25,6 +25,9 @@ A 32 byte seed stored offline permanently. The only authority for the identity.
 ### Epoch key
 A derived ed25519 keypair used as the active posting key for a specific time window. The private seed is derived deterministically but the private key itself is never included in lineage, only the public.
 
+### Epoch 0   
+A user’s existing Nostr key authenticated by the new root key; it anchors history but never acts as a seed or authority for future epochs.
+
 ### Epoch label
 A UTF 8 string used as the derivation namespace. Labels MUST be treated as raw byte strings without normalization.  
 Examples: `2025Q4`, `2026-01`, `2026-01-01`, `v2`, `compromise-001`.
@@ -163,11 +166,11 @@ signature = S
 
 6. Extract the epoch label from the `["epoch", label]` tag
 
-### Freshness and Non Reuse
+### 4.2 Freshness and Non Reuse
 
 Clients MUST reject any lineage event where the `epoch_pubkey` in the event has already appeared earlier in the same root authority’s lineage chain.
 
-### Epoch Label Validation
+### 4.3 Epoch Label Validation
 
 After extracting the label, a client MUST ensure:
 - The label is a UTF8 string.  
@@ -177,6 +180,40 @@ After extracting the label, a client MUST ensure:
 - If any label validation fails, the lineage event MUST be rejected.  
 
 If any step fails, lineage MUST be rejected.
+
+### 4.4 Migration for Existing Long Lived Keys
+
+Existing Nostr identities that were not originally derived from a CRI root key MUST be treated as `epoch 0`. Epoch 0 represents the first operational key in the lineage, but it is not a derivation parent for any future epochs.  
+
+#### Migration proceeds as follows:  
+1. The user generates a new offline root key.
+2. The user publishes a lineage event binding the root key to their existing pubkey, designating it as `epoch 0`.  
+3. Clients that support CRI MUST accept this lineage event as the authoritative starting point for the identity.  
+4. **All future epoch keys are derived deterministically from the root key**, not from `epoch 0`.  
+5. Epoch 0 behaves exactly like any other epoch: it remains valid for historical events, but it never acts as a seed or derivation input.  
+
+This rule preserves CRI’s core security property: **only the root key may authorize forward motion in the identity**.  
+Operational keys, including epoch 0, cannot derive or authorize future epochs. Using the existing hot key as a derivation seed destroys the cold root guarantee.
+
+### 4.5 Identity Anchoring for Migration
+
+When migrating an existing long lived Nostr key into CRI, the existing identity MUST anchor the root binding.
+
+Clients implementing CRI MUST apply the following rules:
+1. Existing key must publish the binding  
+  A lineage event that introduces a root key for an existing identity MUST be signed by that identity’s current operational key `epoch 0` and MUST appear in that key’s event history.  
+
+2. Third-party bindings are ignored  
+  A lineage event that binds a root key to some pubkey, but is signed by any other key, MUST NOT be treated as a valid migration or root binding for that identity.
+
+3. No replacement without the identity’s own signature  
+  Clients MUST NOT replace or extend an identity’s lineage based solely on a newly introduced root key. The existing key MUST explicitly accept the root via a lineage event.
+
+Clients MUST associate lineage events with the identity that created the event, not with the pubkey referenced inside the event’s tags.  
+
+#### Security rationale
+
+This preserves the core security property that the identity accepts the root, not the other way around. An attacker cannot steal an identity by generating a new root and publishing a lineage event that “claims” someone else’s pubkey, because they cannot get that lineage event into the victim’s event feed without the victim’s private key. The only way to hijack an identity under CRI is to already possess the victim’s original nsec, which is the same precondition required to hijack the identity in today’s Nostr model. CRI does not weaken this; it only limits the blast radius once rotation occurs.
 
 ## 5. Client Behavior Summary
 
