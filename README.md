@@ -133,7 +133,7 @@ Any implementation must use these parameters to reproduce the vectors in
 
 ## Implementations
 
-Cold Root Identity currently has two matching reference implementations:
+Cold Root Identity currently has multiple reference implementations:
 
 - **Python**: core library under `coldroot/`  
   - Test suite: `pytest`
@@ -141,7 +141,7 @@ Cold Root Identity currently has two matching reference implementations:
   - Test suite: `cd go && go test ./...`  
 - **JavaScript (Node)**: matching implementation under `js/`, verified against the same vectors.
 
-Both implementations reproduce the deterministic vectors in
+All implementations reproduce the deterministic vectors in
 `tests/vectors/cold_root_identity.v1.json` and are validated against the same
 HKDF parameters and lineage event structure.
 
